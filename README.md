@@ -23,3 +23,10 @@ for more information on getting your keys.
 
 ## Usage
 `python find_iam_user.py <SOME-ACCESS-KEY-ID-STRING>`
+
+## How it Works
+1. First establishes an IAM connection using the default AWS credentials on the system.
+1. Lists all users and searches for any with the provided AWS Access Key ID
+1. If no user is found with the AWS Access Key ID, attempts to establish a new
+IAM connection with the provided AWS Access Key ID and (prompted-for) AWS
+Secret Access Key. Information about the user can be provided if successful.
