@@ -2,7 +2,7 @@
 # Find the IAM username belonging to AWS_ACCESS_KEY_ID
 # Useful for finding IAM user corresponding to a compromised AWS credential
 # Usage:
-#     find_iam_user AWS_ACCESS_KEY_ID
+#     python find_iam_user.py AWS_ACCESS_KEY_ID
 # Requirements:
 #
 # Environmental variables:
@@ -45,5 +45,22 @@ def find_key():
         return True
   return False
 
+def get_user_info():
+    prompt = "Enter AWS Secret Access Key for Access Key ID %s: " % TARGET_ACCESS_KEY
+    TARGET_SECRET_KEY = raw_input(prompt)
+    iam = boto.connect_iam(aws_access_key_id = TARGET_ACCESS_KEY, aws_secret_access_key = TARGET_SECRET_KEY)
+    if(iam):
+        user = iam.get_user()
+        if(user):
+            print user
+            return True
+        else:
+            print 'No AWS IAM User information found associated with supplied AWS credentials.'
+    else:
+        print 'Unable to connect to AWS account with supplied AWS credentials.'
+    return False
+
+# Script main entry point
 if not find_key():
   print 'Did not find access key (' + TARGET_ACCESS_KEY + ') in ' + str(len(users)) + ' IAM users.'
+  get_user_info()
